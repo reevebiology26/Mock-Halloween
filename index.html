@@ -3,146 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ace Your Mock Weaknesses</title>
+    <title>Ace Your Mock Weaknesses - HALLOWEEN EDITION</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Spooky Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
+        :root {
+            --blood-red: #8a0303;
+            --pumpkin-orange: #ff7518;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f1115; /* Very dark slate/black */
+            color: #e2e8f0;
+        }
+        .font-creepy {
+            font-family: 'Creepster', system-ui, cursive;
+            letter-spacing: 0.05em;
+        }
+        
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            25% { transform: translateX(-8px) rotate(-2deg); }
+            50% { transform: translateX(8px) rotate(2deg); }
+            75% { transform: translateX(-8px) rotate(-2deg); }
         }
-        @keyframes pulse-red {
-            0%, 100% { background-color: #ef4444; color: white; }
-            50% { background-color: #fca5a5; color: #7f1d1d; }
+        @keyframes pulse-blood {
+            0%, 100% { background-color: var(--blood-red); color: white; box-shadow: 0 0 15px var(--blood-red); }
+            50% { background-color: #dc2626; color: black; box-shadow: 0 0 30px #dc2626; }
         }
         @keyframes streakPop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2) rotate(5deg); }
-            100% { transform: scale(1) rotate(0); }
+            0% { transform: scale(1); filter: drop-shadow(0 0 0px var(--pumpkin-orange)); }
+            50% { transform: scale(1.3) rotate(10deg); filter: drop-shadow(0 0 20px var(--pumpkin-orange)); }
+            100% { transform: scale(1) rotate(0); filter: drop-shadow(0 0 10px var(--pumpkin-orange)); }
         }
-        /* Custom animation for the splash screen pen */
-        @keyframes writingAnim {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(10px, -10px) rotate(-10deg); }
-            50% { transform: translate(20px, 0px) rotate(5deg); }
-            75% { transform: translate(10px, 10px) rotate(-5deg); }
+        @keyframes floatGhost {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(0, -20px) scale(1.05); }
+        }
+        @keyframes scaryZoom {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+            25%, 75% { opacity: 0.9; text-shadow: 0 0 10px red; }
         }
         
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-        .animate-shake {
-            animation: shake 0.4s ease-in-out;
-        }
-        .animate-dictate {
-            animation: pulse-red 1.5s infinite;
-        }
-        .animate-streak-pop {
-            animation: streakPop 0.4s ease-out;
-        }
-        .animate-writing {
-            animation: writingAnim 2s infinite ease-in-out;
-        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .animate-shake { animation: shake 0.4s ease-in-out; }
+        .animate-dictate { animation: pulse-blood 1.5s infinite; }
+        .animate-streak-pop { animation: streakPop 0.5s ease-out; }
+        .animate-ghost { animation: floatGhost 3s infinite ease-in-out; }
+        .animate-scary-zoom { animation: scaryZoom 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-flicker { animation: flicker 2s infinite; }
+        
         .hidden { display: none !important; }
         
-        /* Dashboard Circle SVG Transition */
-        .circle-chart-path {
-            transition: stroke-dasharray 1s ease-out;
+        /* Custom Scrollbar for dark theme */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #ea580c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c2410c; }
+        
+        .circle-chart-path { transition: stroke-dasharray 1s ease-out; }
+
+        /* Dark Mode Input Autofill fix */
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
+            -webkit-text-fill-color: white !important;
         }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 flex flex-col min-h-screen overflow-hidden" id="main-body">
+<body class="flex flex-col min-h-screen overflow-hidden" id="main-body">
+
+    <!-- SCARY OVERLAY (Triggered on Perfect Score) -->
+    <div id="scary-overlay" class="fixed inset-0 bg-black/95 z-[100] hidden items-center justify-center flex-col text-center backdrop-blur-sm">
+        <div id="scary-content" class="scale-0 opacity-0">
+            <i class="ph-fill ph-skull text-[12rem] text-orange-600 animate-pulse drop-shadow-[0_0_30px_rgba(234,88,12,0.8)]"></i>
+            <h1 class="font-creepy text-5xl md:text-7xl text-red-600 mt-8 tracking-widest animate-flicker drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]">
+                CONGRATULATIONS,<br>MORTAL.
+            </h1>
+            <p class="text-orange-400 mt-6 text-xl md:text-2xl font-bold tracking-widest uppercase">You have survived this trial.</p>
+        </div>
+    </div>
 
     <!-- Splash Screen -->
-    <div id="splash-screen" class="fixed inset-0 z-50 bg-slate-50 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
-        <div class="text-center px-4 animate-fade-in flex flex-col items-center">
+    <div id="splash-screen" class="fixed inset-0 z-50 bg-[#0a0a0a] flex flex-col items-center justify-center transition-opacity duration-1000 ease-in-out bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-900 via-black to-black">
+        <div class="text-center px-4 flex flex-col items-center">
             
-            <!-- Animated Icons (Paper and Pen) -->
-            <div class="relative mb-8 w-32 h-32 flex items-center justify-center">
-                <!-- Exam Paper -->
-                <i class="ph-fill ph-file-text text-9xl text-blue-300 absolute"></i>
-                <!-- Animated Pen -->
-                <i class="ph-fill ph-pen-nib text-6xl text-blue-700 absolute -right-2 bottom-0 animate-writing drop-shadow-lg"></i>
+            <!-- Floating Ghost -->
+            <div class="relative mb-8 w-40 h-40 flex items-center justify-center animate-ghost">
+                <i class="ph-fill ph-ghost text-9xl text-gray-200 opacity-80 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]"></i>
             </div>
             
-            <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6 text-slate-800">
-                Ace Your Mock <span class="text-blue-600 block sm:inline mt-2 sm:mt-0">Weaknesses</span>
+            <h1 class="font-creepy text-5xl md:text-7xl tracking-widest mb-6 text-orange-500 drop-shadow-[0_0_10px_rgba(234,88,12,0.5)]">
+                ACE YOUR MOCK <span class="text-red-600 block sm:inline mt-2 sm:mt-0 animate-flicker">WEAKNESSES</span>
             </h1>
             
             <div class="mb-12 transform -rotate-2 hover:rotate-0 transition-transform duration-300">
-                <p class="inline-block bg-emerald-100 text-emerald-800 text-xl md:text-3xl font-black px-6 py-4 rounded-2xl border-4 border-emerald-400 shadow-lg">
-                    Lock In with Mr Reeve's Interactive Resources 🔥
+                <p class="inline-block bg-gray-900 text-orange-500 text-xl md:text-3xl font-black px-6 py-4 rounded-2xl border-4 border-orange-600 shadow-[0_0_20px_rgba(234,88,12,0.3)]">
+                    Survive Mr Reeve's Resources 🕷️
                 </p>
             </div>
             
-            <button onclick="dismissSplash()" class="bg-blue-600 hover:bg-blue-700 text-white text-2xl font-bold py-4 px-10 rounded-full shadow-[0_10px_20px_rgba(37,99,235,0.3)] transition-transform transform hover:scale-105 hover:-translate-y-1 flex items-center gap-3">
-                <span>Start Revising</span>
-                <i class="ph-bold ph-arrow-right"></i>
+            <button onclick="dismissSplash()" class="bg-red-700 hover:bg-red-800 text-white text-2xl font-bold py-4 px-10 rounded-full shadow-[0_0_30px_rgba(220,38,38,0.5)] transition-all transform hover:scale-110 hover:-translate-y-1 flex items-center gap-3 border-2 border-red-500">
+                <i class="ph-fill ph-skull"></i>
+                <span class="font-creepy tracking-wider text-3xl mt-1">Enter If You Dare</span>
             </button>
         </div>
     </div>
 
     <!-- Main App Content (Behind Splash Screen) -->
-    <header class="bg-blue-900 text-white shadow-md z-10 sticky top-0">
+    <header class="bg-black text-white shadow-[0_4px_20px_rgba(234,88,12,0.15)] z-10 sticky top-0 border-b border-orange-900/50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight">Ace Your Mock Weaknesses</h1>
-                <p class="text-blue-200 text-sm font-medium">Created by Mr Reeve | AQA Biology Revision</p>
+                <h1 class="font-creepy text-3xl tracking-widest text-orange-500">Ace Your Mock Weaknesses</h1>
+                <p class="text-gray-400 text-sm font-medium">Created by Mr Reeve | AQA Biology Revision</p>
             </div>
             
-            <div class="flex items-center gap-4">
-                <!-- Gamified Streak Banner -->
-                <div id="streak-banner" class="bg-orange-500 text-white font-bold px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-colors duration-300">
-                    <i class="ph-fill ph-fire text-xl"></i> 
-                    <span>Streak: <span id="streak-counter" class="text-xl">0</span></span>
+            <div class="flex items-center gap-6">
+                <!-- Gamified GIANT PUMPKIN Streak Banner -->
+                <div id="streak-banner" class="bg-gray-900 text-orange-500 font-bold px-5 py-2 rounded-full border border-orange-700 shadow-[0_0_15px_rgba(234,88,12,0.2)] flex items-center gap-3 transition-colors duration-300">
+                    <span class="text-5xl drop-shadow-[0_0_10px_rgba(255,165,0,0.8)] -my-4 z-10 relative">🎃</span>
+                    <span class="text-lg tracking-widest uppercase">Streak: <span id="streak-counter" class="text-2xl font-black text-white">0</span></span>
                 </div>
 
-                <button onclick="handleScreenshotClick()" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-2 rounded-full font-bold shadow-lg transition-transform transform hover:scale-105">
-                    <i class="ph ph-camera text-xl"></i>
-                    <span class="hidden sm:inline">Scorecard</span>
+                <button onclick="handleScreenshotClick()" class="flex items-center gap-2 bg-red-700 hover:bg-red-600 text-white px-5 py-2.5 rounded-full font-bold shadow-[0_0_15px_rgba(220,38,38,0.4)] transition-transform transform hover:scale-105 border border-red-500">
+                    <i class="ph-fill ph-scroll text-xl"></i>
+                    <span class="hidden sm:inline font-creepy tracking-wider text-xl mt-1">Judgement</span>
                 </button>
             </div>
         </div>
         
-        <div class="flex overflow-x-auto bg-blue-950">
+        <div class="flex overflow-x-auto bg-[#0a0a0a] scrollbar-hide border-b border-gray-800">
             <div class="max-w-6xl mx-auto w-full flex" id="nav-tabs">
-                <button onclick="switchTab('matchup')" class="nav-btn active flex items-center gap-2 px-6 py-3 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 bg-blue-800 text-white border-blue-400" data-tab="matchup"><i class="ph ph-arrows-left-right"></i> 1. Match Up</button>
-                <button onclick="switchTab('mcq')" class="nav-btn flex items-center gap-2 px-6 py-3 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-blue-300 border-transparent hover:bg-blue-900 hover:text-white" data-tab="mcq"><i class="ph ph-check-circle"></i> 2. Quiz</button>
-                <button onclick="switchTab('calc')" class="nav-btn flex items-center gap-2 px-6 py-3 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-blue-300 border-transparent hover:bg-blue-900 hover:text-white" data-tab="calc"><i class="ph ph-calculator"></i> 3. Maths</button>
-                <button onclick="switchTab('long')" class="nav-btn flex items-center gap-2 px-6 py-3 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-blue-300 border-transparent hover:bg-blue-900 hover:text-white" data-tab="long"><i class="ph ph-pen-nib"></i> 4. Longer Answers</button>
-                <button onclick="switchTab('dash')" class="nav-btn flex items-center gap-2 px-6 py-3 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-blue-300 border-transparent hover:bg-blue-900 hover:text-white" data-tab="dash"><i class="ph ph-chart-bar"></i> 5. Dashboard</button>
+                <button onclick="switchTab('matchup')" class="nav-btn active flex items-center gap-2 px-6 py-4 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 bg-gray-900 text-orange-500 border-orange-500" data-tab="matchup"><i class="ph-fill ph-arrows-left-right text-lg"></i> 1. Match Up</button>
+                <button onclick="switchTab('mcq')" class="nav-btn flex items-center gap-2 px-6 py-4 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-gray-400 border-transparent hover:bg-gray-800 hover:text-gray-200" data-tab="mcq"><i class="ph-fill ph-check-circle text-lg"></i> 2. Quiz</button>
+                <button onclick="switchTab('calc')" class="nav-btn flex items-center gap-2 px-6 py-4 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-gray-400 border-transparent hover:bg-gray-800 hover:text-gray-200" data-tab="calc"><i class="ph-fill ph-calculator text-lg"></i> 3. Maths</button>
+                <button onclick="switchTab('long')" class="nav-btn flex items-center gap-2 px-6 py-4 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-gray-400 border-transparent hover:bg-gray-800 hover:text-gray-200" data-tab="long"><i class="ph-fill ph-pen-nib text-lg"></i> 4. Ritual Answers</button>
+                <button onclick="switchTab('dash')" class="nav-btn flex items-center gap-2 px-6 py-4 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-gray-400 border-transparent hover:bg-gray-800 hover:text-gray-200" data-tab="dash"><i class="ph-fill ph-chart-bar text-lg"></i> 5. The Crypt</button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-6xl mx-auto w-full p-4 sm:p-6 pb-20 relative">
+    <main class="flex-grow max-w-6xl mx-auto w-full p-4 sm:p-6 pb-20 relative relative z-0">
         
+        <!-- Background Ambient Emojis (Optional subtle styling) -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden opacity-5 z-[-1]">
+            <i class="ph-fill ph-bat text-[20rem] absolute top-10 left-10 rotate-12"></i>
+            <i class="ph-fill ph-spider-web text-[30rem] absolute -bottom-10 -right-10"></i>
+        </div>
+
         <!-- Tab 1: Match Up -->
         <div id="tab-matchup" class="tab-content animate-fade-in">
             <div class="mb-6">
-                <h2 class="text-2xl font-bold flex items-center gap-2"><i class="ph ph-arrows-left-right text-blue-600"></i> Tab 1: Match Up</h2>
-                <p class="text-slate-600">Tap a question box, then tap the correct answer box to link them. Clear the board! (Batch <span id="match-batch-label">1</span> of 2)</p>
+                <h2 class="font-creepy text-3xl tracking-widest flex items-center gap-3 text-orange-500"><i class="ph-fill ph-arrows-left-right"></i> Match Up</h2>
+                <p class="text-gray-400 mt-1">Tap a question box, then tap the correct answer box to link them. Clear the board before time runs out! (Batch <span id="match-batch-label" class="font-bold text-orange-500">1</span> of 2)</p>
             </div>
-            <div id="matchup-complete" class="hidden bg-emerald-100 border border-emerald-300 text-emerald-800 p-8 rounded-2xl text-center font-bold text-xl shadow-sm">
-                🎉 Fantastic! You've matched all the concepts. Score: 8/8
+            <div id="matchup-complete" class="hidden bg-gray-900 border-2 border-orange-500 text-orange-400 p-8 rounded-2xl text-center shadow-[0_0_20px_rgba(234,88,12,0.2)] flex flex-col items-center justify-center">
+                <i class="ph-fill ph-magic-wand text-6xl text-orange-500 mb-4 animate-pulse"></i>
+                <h2 class="font-creepy text-4xl tracking-widest mb-2 text-white">Witchcraft!</h2>
+                <p class="text-lg">You've bound all the concepts perfectly.</p>
+                <div class="text-4xl font-black mt-4 text-orange-500">Score: 8/8</div>
             </div>
             <div id="matchup-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-3">
-                    <h3 class="font-bold text-lg text-slate-500 border-b pb-2 mb-4">Questions</h3>
+                    <h3 class="font-bold text-lg text-orange-700 border-b border-orange-900/50 pb-2 mb-4 flex items-center gap-2 uppercase tracking-wider"><i class="ph-fill ph-question text-xl"></i> Curses (Questions)</h3>
                     <div id="match-questions" class="space-y-3"></div>
                 </div>
                 <div class="space-y-3">
-                    <h3 class="font-bold text-lg text-slate-500 border-b pb-2 mb-4">Answers</h3>
+                    <h3 class="font-bold text-lg text-orange-700 border-b border-orange-900/50 pb-2 mb-4 flex items-center gap-2 uppercase tracking-wider"><i class="ph-fill ph-book-open-text text-xl"></i> Spells (Answers)</h3>
                     <div id="match-answers" class="space-y-3"></div>
                 </div>
             </div>
@@ -150,224 +194,261 @@
 
         <!-- Tab 2: MCQ -->
         <div id="tab-mcq" class="tab-content hidden animate-fade-in max-w-3xl mx-auto">
-            <div class="mb-6 flex justify-between items-end border-b pb-4">
+            <div class="mb-6 flex justify-between items-end border-b border-gray-800 pb-4">
                 <div>
-                    <h2 class="text-2xl font-bold flex items-center gap-2"><i class="ph ph-check-circle text-blue-600"></i> Tab 2: Quiz (Multiple Choice)</h2>
-                    <p class="text-slate-600 mt-1" id="mcq-subtitle">Select the correct answer. Wrong answers will be re-tested at the end.</p>
+                    <h2 class="font-creepy text-3xl tracking-widest flex items-center gap-3 text-orange-500"><i class="ph-fill ph-check-circle"></i> The Interrogation (Quiz)</h2>
+                    <p class="text-gray-400 mt-1" id="mcq-subtitle">Select the correct answer. The spirits will test your wrong answers again.</p>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm text-slate-500 font-bold uppercase tracking-wider">Progress</div>
-                    <div class="text-2xl font-black text-blue-700" id="mcq-progress">1 / 20</div>
+                    <div class="text-sm text-gray-500 font-bold uppercase tracking-wider">Souls Saved</div>
+                    <div class="text-2xl font-black text-orange-500" id="mcq-progress">1 / 20</div>
                 </div>
             </div>
-            <div id="mcq-complete" class="hidden bg-emerald-100 text-emerald-800 p-8 rounded-2xl text-center shadow-md max-w-lg mx-auto mt-12">
-                <i class="ph-fill ph-check-circle text-6xl mx-auto mb-4 block"></i>
-                <h2 class="text-2xl font-black mb-2">Quiz Complete!</h2>
-                <p class="text-lg">Your first-attempt score is recorded.</p>
-                <div class="text-5xl font-black mt-6 text-emerald-600" id="mcq-final-score">0 / 20</div>
+            <div id="mcq-complete" class="hidden bg-gray-900 text-orange-400 p-8 rounded-2xl text-center shadow-[0_0_20px_rgba(234,88,12,0.2)] max-w-lg mx-auto mt-12 border-2 border-orange-500">
+                <i class="ph-fill ph-ghost text-6xl mx-auto mb-4 block animate-ghost"></i>
+                <h2 class="font-creepy text-4xl tracking-widest mb-2 text-white">Interrogation Complete!</h2>
+                <p class="text-lg">The spirits have recorded your first attempt.</p>
+                <div class="text-5xl font-black mt-6 text-orange-500 drop-shadow-md" id="mcq-final-score">0 / 20</div>
             </div>
-            <div id="mcq-container" class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 mb-6">
-                <h3 class="text-xl sm:text-2xl font-semibold mb-6 text-slate-800" id="mcq-question">Loading...</h3>
+            <div id="mcq-container" class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-700 mb-6">
+                <h3 class="text-xl sm:text-2xl font-semibold mb-6 text-gray-100 leading-snug" id="mcq-question">Conjuring question...</h3>
                 <div class="space-y-3" id="mcq-options"></div>
             </div>
         </div>
 
         <!-- Tab 3: Maths -->
         <div id="tab-calc" class="tab-content hidden animate-fade-in max-w-4xl mx-auto">
-            <div class="mb-6 border-b pb-4">
-                <h2 class="text-2xl font-bold flex items-center gap-2"><i class="ph ph-calculator text-blue-600"></i> Tab 3: Calculations</h2>
-                <p class="text-slate-600 mt-1">Enter your numerical answers below. Do not include units in the box, just the number (rounded as specified).</p>
+            <div class="mb-6 border-b border-gray-800 pb-4">
+                <h2 class="font-creepy text-3xl tracking-widest flex items-center gap-3 text-orange-500"><i class="ph-fill ph-calculator"></i> Dark Arithmancy (Maths)</h2>
+                <p class="text-gray-400 mt-1">Enter your numerical answers below. Leave out the units, mortal.</p>
             </div>
-            <div id="calc-summary" class="hidden bg-emerald-100 text-emerald-800 p-6 rounded-2xl mb-8 shadow-sm flex items-center justify-between">
-                <div>
-                    <h3 class="font-bold text-xl">Maths Completed</h3>
-                    <p>Review the model workings below to see where you made any errors.</p>
+            <div id="calc-summary" class="hidden bg-gray-900 text-orange-400 p-6 rounded-2xl mb-8 shadow-[0_0_20px_rgba(234,88,12,0.2)] flex-col sm:flex-row items-center justify-between border-2 border-orange-500 gap-4">
+                <div class="text-center sm:text-left">
+                    <h3 class="font-creepy text-3xl tracking-widest text-white flex items-center gap-2 justify-center sm:justify-start"><i class="ph-fill ph-check-circle text-orange-500"></i> Ritual Complete</h3>
+                    <p class="mt-1 font-medium text-gray-300">Review the forbidden texts below to see where you failed.</p>
                 </div>
-                <div class="text-4xl font-black" id="calc-score-display">0 / 10</div>
+                <div class="text-5xl font-black text-orange-500 bg-black px-6 py-2 rounded-xl border border-orange-900 shadow-inner" id="calc-score-display">0 / 10</div>
             </div>
             <div id="calc-list" class="space-y-6"></div>
-            <button id="calc-submit-btn" onclick="submitCalculations()" class="mt-8 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-colors text-lg">
-                Check Answers & Reveal Workings
+            <button id="calc-submit-btn" onclick="submitCalculations()" class="mt-8 w-full bg-orange-700 hover:bg-orange-600 text-black font-black uppercase tracking-widest py-4 rounded-xl shadow-[0_0_15px_rgba(234,88,12,0.4)] transition-colors text-lg flex items-center justify-center gap-3">
+                <i class="ph-bold ph-eye"></i> Reveal The Truth
             </button>
         </div>
 
         <!-- Tab 4: Long Answers -->
         <div id="tab-long" class="tab-content hidden animate-fade-in max-w-4xl mx-auto">
-            <div class="mb-6 border-b pb-4">
-                <h2 class="text-2xl font-bold flex items-center gap-2"><i class="ph ph-pen-nib text-blue-600"></i> Tab 4: Longer Answers</h2>
-                <p class="text-slate-600 mt-1">Structure your 3-step responses carefully. Type or dictate your answer, then tap 'Mark Answer' to get instant feedback.</p>
+            <div class="mb-6 border-b border-gray-800 pb-4">
+                <h2 class="font-creepy text-3xl tracking-widest flex items-center gap-3 text-orange-500"><i class="ph-fill ph-pen-nib"></i> The Book of Shadows (Long Answers)</h2>
+                <p class="text-gray-400 mt-1">Structure your incantations carefully. Type or dictate your answer to the spirits.</p>
             </div>
             <div id="long-list" class="space-y-8"></div>
         </div>
 
         <!-- Tab 5: Dashboard -->
         <div id="tab-dash" class="tab-content hidden animate-fade-in max-w-3xl mx-auto">
-            <div class="mb-6 border-b pb-4">
-                <h2 class="text-2xl font-bold flex items-center gap-2"><i class="ph ph-chart-bar text-blue-600"></i> Tab 5: Dashboard & Review</h2>
-                <p class="text-slate-600 mt-1">Review your overall performance and generate your scorecard.</p>
+            <div class="mb-6 border-b border-gray-800 pb-4">
+                <h2 class="font-creepy text-3xl tracking-widest flex items-center gap-3 text-orange-500"><i class="ph-fill ph-chart-bar"></i> The Crypt (Dashboard)</h2>
+                <p class="text-gray-400 mt-1">Review your survival odds and generate your final judgment.</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl shadow-md border border-slate-200">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-8 border-b pb-8">
+            <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700 relative overflow-hidden">
+                <!-- Spiderweb bg -->
+                <i class="ph-fill ph-spider-web text-[20rem] text-gray-700 absolute -top-10 -right-10 opacity-20 pointer-events-none"></i>
+                
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-8 border-b border-gray-700 pb-8 relative z-10">
                     <div class="text-center md:text-left">
-                        <h3 class="text-xl font-bold text-slate-500 uppercase tracking-wider mb-2">Overall Mastery</h3>
-                        <div class="text-6xl font-black text-slate-800" id="dash-percentage">0%</div>
-                        <p class="text-slate-600 font-medium mt-2 max-w-sm" id="dash-feedback">Complete the activities to generate your feedback.</p>
+                        <h3 class="font-creepy text-3xl text-orange-600 tracking-widest mb-2">Soul Mastery</h3>
+                        <div class="text-6xl font-black text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]" id="dash-percentage">0%</div>
+                        <p class="text-gray-400 font-medium mt-2 max-w-sm" id="dash-feedback">Complete the trials to uncover your fate.</p>
                     </div>
-                    <div class="relative w-48 h-48 shrink-0">
+                    <div class="relative w-40 h-40 sm:w-48 sm:h-48 shrink-0">
                         <svg viewBox="0 0 36 36" class="w-full h-full transform -rotate-90">
-                            <path class="text-slate-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8"/>
-                            <path id="dash-svg-path" class="text-blue-500 circle-chart-path" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round"/>
+                            <path class="text-gray-900" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8"/>
+                            <path id="dash-svg-path" class="text-orange-600 circle-chart-path drop-shadow-[0_0_5px_rgba(234,88,12,0.8)]" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.8" stroke-linecap="round"/>
                         </svg>
-                        <div class="absolute inset-0 flex items-center justify-center font-bold text-3xl text-blue-600" id="dash-svg-text">0%</div>
+                        <div class="absolute inset-0 flex items-center justify-center font-creepy tracking-widest text-4xl sm:text-5xl text-orange-500" id="dash-svg-text">0%</div>
                     </div>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4 mb-8">
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
-                        <div class="text-sm font-bold text-slate-500 uppercase">1. Match Up</div>
-                        <div class="mt-2 flex items-end justify-between">
-                            <div class="text-2xl font-black text-slate-800"><span id="score-match">0</span> <span class="text-base text-slate-400 font-medium">/ 8</span></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 relative z-10">
+                    <div class="bg-gray-900 p-5 rounded-xl border border-gray-700 flex flex-col justify-between hover:border-orange-500 transition-colors group">
+                        <div class="text-sm font-bold text-gray-500 uppercase flex items-center gap-2 group-hover:text-orange-400 transition-colors"><i class="ph-fill ph-arrows-left-right text-lg"></i> 1. Match Up</div>
+                        <div class="mt-3 flex items-end justify-between">
+                            <div class="text-4xl font-black text-white"><span id="score-match">0</span> <span class="text-xl text-gray-600 font-medium">/ 8</span></div>
                         </div>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
-                        <div class="text-sm font-bold text-slate-500 uppercase">2. Quiz (MCQ)</div>
-                        <div class="mt-2 flex items-end justify-between">
-                            <div class="text-2xl font-black text-slate-800"><span id="score-mcq">0</span> <span class="text-base text-slate-400 font-medium">/ 20</span></div>
+                    <div class="bg-gray-900 p-5 rounded-xl border border-gray-700 flex flex-col justify-between hover:border-orange-500 transition-colors group">
+                        <div class="text-sm font-bold text-gray-500 uppercase flex items-center gap-2 group-hover:text-orange-400 transition-colors"><i class="ph-fill ph-check-circle text-lg"></i> 2. Interrogation</div>
+                        <div class="mt-3 flex items-end justify-between">
+                            <div class="text-4xl font-black text-white"><span id="score-mcq">0</span> <span class="text-xl text-gray-600 font-medium">/ 20</span></div>
                         </div>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
-                        <div class="text-sm font-bold text-slate-500 uppercase">3. Maths</div>
-                        <div class="mt-2 flex items-end justify-between">
-                            <div class="text-2xl font-black text-slate-800"><span id="score-calc">0</span> <span class="text-base text-slate-400 font-medium">/ 10</span></div>
+                    <div class="bg-gray-900 p-5 rounded-xl border border-gray-700 flex flex-col justify-between hover:border-orange-500 transition-colors group">
+                        <div class="text-sm font-bold text-gray-500 uppercase flex items-center gap-2 group-hover:text-orange-400 transition-colors"><i class="ph-fill ph-calculator text-lg"></i> 3. Dark Arithmancy</div>
+                        <div class="mt-3 flex items-end justify-between">
+                            <div class="text-4xl font-black text-white"><span id="score-calc">0</span> <span class="text-xl text-gray-600 font-medium">/ 10</span></div>
                         </div>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
-                        <div class="text-sm font-bold text-slate-500 uppercase">4. Long Answers</div>
-                        <div class="mt-2 flex items-end justify-between">
-                            <div class="text-2xl font-black text-slate-800"><span id="score-long">0</span> <span class="text-base text-slate-400 font-medium">/ 12</span></div>
+                    <div class="bg-gray-900 p-5 rounded-xl border border-gray-700 flex flex-col justify-between hover:border-orange-500 transition-colors group">
+                        <div class="text-sm font-bold text-gray-500 uppercase flex items-center gap-2 group-hover:text-orange-400 transition-colors"><i class="ph-fill ph-pen-nib text-lg"></i> 4. Book of Shadows</div>
+                        <div class="mt-3 flex items-end justify-between">
+                            <div class="text-4xl font-black text-white"><span id="score-long">0</span> <span class="text-xl text-gray-600 font-medium">/ 12</span></div>
                         </div>
                     </div>
                 </div>
-                <button onclick="handleScreenshotClick()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl shadow-lg transition-colors text-xl flex justify-center items-center gap-3">
-                    <i class="ph ph-camera text-2xl"></i> Generate Final Scorecard Image
+                <button onclick="handleScreenshotClick()" class="w-full bg-red-700 hover:bg-red-600 text-white font-black uppercase tracking-widest py-4 rounded-xl shadow-[0_0_20px_rgba(220,38,38,0.5)] transition-colors text-xl flex justify-center items-center gap-3 relative z-10 border border-red-500">
+                    <i class="ph-fill ph-scroll text-3xl"></i> Generate Final Judgement
                 </button>
             </div>
         </div>
     </main>
 
     <!-- Toast Message -->
-    <div id="toast-message" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3 transition-opacity duration-300 opacity-0 pointer-events-none">
-        <i class="ph ph-info text-blue-300 text-xl"></i>
-        <span id="toast-text">Message</span>
+    <div id="toast-message" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-red-950 border border-red-600 text-white px-6 py-3 rounded-full shadow-[0_0_20px_rgba(220,38,38,0.6)] z-[70] flex items-center gap-3 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <i class="ph-fill ph-skull text-red-400 text-2xl animate-pulse"></i>
+        <span id="toast-text" class="font-medium tracking-wide">Message</span>
     </div>
 
     <!-- Name Entry Modal -->
-    <div id="name-modal" class="fixed inset-0 bg-slate-900/80 z-[60] hidden items-center justify-center p-4">
-        <div class="bg-white p-6 sm:p-8 rounded-2xl max-w-sm w-full shadow-2xl relative border-t-8 border-blue-600">
-            <h2 class="text-2xl font-black text-slate-800 mb-2">Enter Your Name</h2>
-            <p class="text-slate-500 font-medium mb-4 text-sm">Please provide your name to generate your personalized scorecard.</p>
-            <input type="text" id="student-name-input" class="w-full p-3 border-2 rounded-xl text-lg outline-none transition-colors border-slate-300 focus:border-blue-500 mb-4" placeholder="Your Name">
+    <div id="name-modal" class="fixed inset-0 bg-black/90 z-[60] hidden items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-gray-900 p-6 sm:p-8 rounded-2xl max-w-sm w-full shadow-[0_0_30px_rgba(234,88,12,0.3)] relative border-t-8 border-orange-600 animate-fade-in">
+            <h2 class="font-creepy text-4xl text-orange-500 mb-2 tracking-widest">Sign Your Soul</h2>
+            <p class="text-gray-400 font-medium mb-6 text-sm">Provide your earthly name to face final judgement.</p>
+            <input type="text" id="student-name-input" class="w-full p-3 border-2 rounded-xl text-lg outline-none transition-colors border-gray-700 focus:border-orange-500 mb-6 bg-gray-800 text-white placeholder-gray-500" placeholder="e.g. Morticia Addams">
             <div class="flex justify-end gap-3">
-                <button onclick="closeNameModal()" class="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors font-medium">Cancel</button>
-                <button onclick="saveNameAndShowScorecard()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-bold shadow-md">Continue</button>
+                <button onclick="closeNameModal()" class="px-5 py-2.5 text-gray-400 hover:bg-gray-800 rounded-xl transition-colors font-medium">Flee</button>
+                <button onclick="saveNameAndShowScorecard()" class="px-5 py-2.5 bg-orange-700 hover:bg-orange-600 text-black rounded-xl transition-colors font-black uppercase tracking-widest shadow-md flex items-center gap-2">Submit <i class="ph-bold ph-arrow-right"></i></button>
             </div>
         </div>
     </div>
 
     <!-- Scorecard Modal -->
-    <div id="scorecard-modal" class="fixed inset-0 bg-slate-900/80 z-50 hidden items-center justify-center p-4">
-        <div class="bg-white p-6 sm:p-8 rounded-2xl max-w-md w-full shadow-2xl relative border-t-8 border-blue-600 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeScorecard()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
-                <i class="ph ph-x-circle text-3xl"></i>
+    <div id="scorecard-modal" class="fixed inset-0 bg-black/90 z-[60] hidden items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-[#111] p-6 sm:p-8 rounded-2xl max-w-md w-full shadow-[0_0_40px_rgba(220,38,38,0.5)] relative border-t-[12px] border-red-700 max-h-[90vh] overflow-y-auto animate-fade-in bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiMxMTEiLz48cmVjdCB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSIjMjIyIi8+PC9zdmc+')]">
+            <button onclick="closeScorecard()" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 transition-colors">
+                <i class="ph-fill ph-x-circle text-3xl"></i>
             </button>
             
             <div class="text-center mb-6">
-                <i class="ph-fill ph-medal text-yellow-500 text-5xl mb-2 mx-auto block"></i>
-                <h2 class="text-3xl font-black text-slate-800">Scorecard</h2>
-                <p class="text-slate-500 font-medium">Ace Your Mock Weaknesses</p>
+                <i class="ph-fill ph-scroll text-red-600 text-6xl mb-2 mx-auto block drop-shadow-[0_0_15px_rgba(220,38,38,0.8)]"></i>
+                <h2 class="font-creepy text-4xl sm:text-5xl text-red-600 tracking-widest animate-flicker mt-2">MORTAL'S FINAL<br>JUDGEMENT</h2>
+                <p class="text-gray-400 font-medium mt-2 uppercase tracking-widest text-xs">Ace Your Mock Weaknesses</p>
             </div>
             
-            <div class="space-y-4 mb-6 text-sm sm:text-base">
-                <div class="flex justify-between border-b pb-2">
-                    <span class="text-slate-600 font-semibold">Pupil Name:</span>
-                    <span class="font-bold text-slate-800" id="sc-name"></span>
+            <div class="space-y-3 mb-8 text-sm sm:text-base bg-black/50 p-5 rounded-xl border border-gray-800">
+                <div class="flex justify-between border-b border-gray-800 pb-3">
+                    <span class="text-gray-400 font-semibold uppercase tracking-wider">Soul Name:</span>
+                    <span class="font-black text-orange-500 text-lg tracking-widest" id="sc-name"></span>
                 </div>
-                <div class="flex justify-between border-b pb-2">
-                    <span class="text-slate-600 font-semibold">Match Up:</span>
-                    <span class="font-bold text-blue-600"><span id="sc-match">0</span> / 8</span>
+                <div class="flex justify-between border-b border-gray-800 py-2">
+                    <span class="text-gray-400 font-semibold">1. Match Up:</span>
+                    <span class="font-bold text-white"><span id="sc-match">0</span> <span class="text-gray-600">/ 8</span></span>
                 </div>
-                <div class="flex justify-between border-b pb-2">
-                    <span class="text-slate-600 font-semibold">Quiz (MCQ):</span>
-                    <span class="font-bold text-blue-600"><span id="sc-mcq">0</span> / 20</span>
+                <div class="flex justify-between border-b border-gray-800 py-2">
+                    <span class="text-gray-400 font-semibold">2. Interrogation:</span>
+                    <span class="font-bold text-white"><span id="sc-mcq">0</span> <span class="text-gray-600">/ 20</span></span>
                 </div>
-                <div class="flex justify-between border-b pb-2">
-                    <span class="text-slate-600 font-semibold">Maths:</span>
-                    <span class="font-bold text-blue-600"><span id="sc-calc">0</span> / 10</span>
-                </div>
-                
-                <div class="pt-2 pb-1">
-                    <span class="text-slate-800 font-bold">Long Answers Breakdown:</span>
-                </div>
-                <div class="flex justify-between text-sm pl-4 pb-1">
-                    <span class="text-slate-600">Q1 (Transport):</span>
-                    <span class="font-bold text-blue-600"><span id="sc-l1">0</span> / 3</span>
-                </div>
-                <div class="flex justify-between text-sm pl-4 pb-1">
-                    <span class="text-slate-600">Q2 (Vapes & Data):</span>
-                    <span class="font-bold text-blue-600"><span id="sc-l2">0</span> / 3</span>
-                </div>
-                <div class="flex justify-between text-sm pl-4 pb-1">
-                    <span class="text-slate-600">Q3 (Tumours):</span>
-                    <span class="font-bold text-blue-600"><span id="sc-l3">0</span> / 3</span>
-                </div>
-                <div class="flex justify-between text-sm pl-4 pb-2 border-b">
-                    <span class="text-slate-600">Q4 (Plants):</span>
-                    <span class="font-bold text-blue-600"><span id="sc-l4">0</span> / 3</span>
+                <div class="flex justify-between border-b border-gray-800 py-2">
+                    <span class="text-gray-400 font-semibold">3. Dark Arithmancy:</span>
+                    <span class="font-bold text-white"><span id="sc-calc">0</span> <span class="text-gray-600">/ 10</span></span>
                 </div>
                 
-                <div class="flex justify-between pt-4 text-lg sm:text-xl">
-                    <span class="font-black text-slate-800">Total Score:</span>
-                    <span class="font-black text-emerald-600"><span id="sc-total">0</span> / 50 (<span id="sc-percent">0</span>%)</span>
+                <div class="pt-4 pb-1">
+                    <span class="text-orange-500 font-bold uppercase tracking-widest text-xs">Book of Shadows Breakdown:</span>
+                </div>
+                <div class="flex justify-between text-sm pl-4 py-1.5">
+                    <span class="text-gray-400">Curse 1 (Transport):</span>
+                    <span class="font-bold text-white bg-gray-800 px-2 py-0.5 rounded border border-gray-700"><span id="sc-l1">0</span> / 3</span>
+                </div>
+                <div class="flex justify-between text-sm pl-4 py-1.5">
+                    <span class="text-gray-400">Curse 2 (Vapes):</span>
+                    <span class="font-bold text-white bg-gray-800 px-2 py-0.5 rounded border border-gray-700"><span id="sc-l2">0</span> / 3</span>
+                </div>
+                <div class="flex justify-between text-sm pl-4 py-1.5">
+                    <span class="text-gray-400">Curse 3 (Tumours):</span>
+                    <span class="font-bold text-white bg-gray-800 px-2 py-0.5 rounded border border-gray-700"><span id="sc-l3">0</span> / 3</span>
+                </div>
+                <div class="flex justify-between text-sm pl-4 py-1.5 pb-4 border-b border-gray-800">
+                    <span class="text-gray-400">Curse 4 (Plants):</span>
+                    <span class="font-bold text-white bg-gray-800 px-2 py-0.5 rounded border border-gray-700"><span id="sc-l4">0</span> / 3</span>
+                </div>
+                
+                <div class="flex justify-between pt-5 text-lg sm:text-xl items-center">
+                    <span class="font-creepy text-2xl text-red-500 tracking-widest">FINAL FATE:</span>
+                    <div class="text-right">
+                        <div class="font-black text-orange-500 text-3xl"><span id="sc-total">0</span> <span class="text-xl text-gray-500">/ 50</span></div>
+                        <div class="text-sm font-bold text-red-600">(<span id="sc-percent">0</span>%)</div>
+                    </div>
                 </div>
             </div>
-            <div class="text-center text-xs sm:text-sm text-slate-400 border-t pt-4">
-                Generated by Mr Reeve's Revision App<br/>
-                <span id="sc-timestamp"></span>
+            <div class="text-center text-xs sm:text-sm text-gray-600">
+                <p>Summoned by Mr Reeve's Dark Arts App</p>
+                <p class="mt-2 font-mono bg-gray-900 text-gray-400 inline-block px-3 py-1 rounded border border-gray-800" id="sc-timestamp"></p>
             </div>
         </div>
     </div>
 
     <script>
-        // Splash Screen Dismissal
+        // --- Spooky TTS on Start ---
         function dismissSplash() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance("May the odds be ever in your favour.");
+                utterance.rate = 0.7; // Slow and creepy
+                utterance.pitch = 0.2; // Deep voice
+                window.speechSynthesis.speak(utterance);
+            }
+
             const splash = document.getElementById('splash-screen');
             const body = document.getElementById('main-body');
             
-            // Allow scrolling again
             body.classList.remove('overflow-hidden');
-            
-            // Fade out splash
             splash.style.opacity = '0';
             
-            // Remove from DOM after fade
-            setTimeout(() => {
-                splash.style.display = 'none';
-            }, 700);
+            setTimeout(() => { splash.style.display = 'none'; }, 1000);
         }
 
-        // Gamification & Audio System using Web Audio API and SpeechSynthesis
+        // --- Scary Full Screen Overlay Logic ---
+        function triggerScaryOverlay() {
+            const overlay = document.getElementById('scary-overlay');
+            const content = document.getElementById('scary-content');
+            
+            // Play a scary sound or TTS
+            SoundFX.scaryLaugh();
+            
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+            
+            // Trigger animation after slight delay to ensure display:flex applied
+            setTimeout(() => {
+                content.classList.remove('scale-0', 'opacity-0');
+                content.classList.add('animate-scary-zoom');
+            }, 50);
+
+            // Hide after 4 seconds
+            setTimeout(() => {
+                content.classList.remove('animate-scary-zoom');
+                content.classList.add('scale-0', 'opacity-0');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                }, 500); // Wait for transition out
+            }, 4000);
+        }
+
+        // --- Spooky Gamification & Audio System ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        function playTone(freq, type, duration, vol) {
+        function playTone(freq, type, duration, vol, detune = 0) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             
             osc.type = type;
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.detune.value = detune; // Adds weird dissonance
             
             gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
             
             osc.connect(gain);
             gain.connect(audioCtx.destination);
@@ -378,30 +459,42 @@
 
         const SoundFX = {
             success: () => {
-                playTone(600, 'sine', 0.1, 0.3);
-                setTimeout(() => playTone(800, 'sine', 0.2, 0.3), 100);
+                // Ethereal chime
+                playTone(880, 'sine', 0.5, 0.2);
+                setTimeout(() => playTone(1108, 'sine', 1.0, 0.1), 100);
             },
             error: () => {
-                playTone(300, 'sawtooth', 0.2, 0.3);
-                setTimeout(() => playTone(250, 'sawtooth', 0.3, 0.3), 150);
+                // Low ominous thud
+                playTone(150, 'sawtooth', 0.3, 0.4, 50);
+                playTone(145, 'square', 0.4, 0.3, -50);
+            },
+            scaryLaugh: () => {
+                // Fallback scary drone if TTS not available for laugh
+                playTone(100, 'sawtooth', 3, 0.5);
+                playTone(102, 'square', 3, 0.5);
+                if ('speechSynthesis' in window) {
+                    const u = new SpeechSynthesisUtterance("Congratulations, mortal.");
+                    u.rate = 0.6; u.pitch = 0.1;
+                    window.speechSynthesis.speak(u);
+                }
             },
             speakPraise: () => {
                 if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel(); // Stop anything currently speaking
-                    const phrases = ["Locked in!", "On fire!", "In the zone!", "You ate that!"];
+                    window.speechSynthesis.cancel(); 
+                    const phrases = ["Your soul is safe...", "Deliciously accurate!", "Witchcraft!", "You survive... for now."];
                     const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
                     
                     const utterance = new SpeechSynthesisUtterance(randomPhrase);
-                    utterance.rate = 1.1;
-                    utterance.pitch = 1.2;
+                    utterance.rate = 0.8;
+                    utterance.pitch = 0.4; // Creepy medium-low pitch
                     window.speechSynthesis.speak(utterance);
                 } else {
-                    SoundFX.success(); // Fallback if TTS is unsupported
+                    SoundFX.success();
                 }
             }
         };
 
-        // App Data
+        // App Data (Unchanged content)
         const MATCH_UP_DATA = [
             { id: 1, q: "Why can't large organisms rely solely on diffusion?", a: "They have a small SA:V ratio and long diffusion distances." },
             { id: 2, q: "What is the true purpose of scientific peer review?", a: "To detect false claims, avoid bias, and check validity." },
@@ -463,7 +556,7 @@
             totalPossible: 50 // 8 + 20 + 10 + 12
         };
 
-        // Gamified Streak Tracking
+        // Gamified Streak Tracking - GIANT PUMPKIN
         let currentStreak = 0;
         function updateStreak(isCorrect) {
             const streakCounter = document.getElementById('streak-counter');
@@ -471,7 +564,6 @@
             
             if (isCorrect) {
                 currentStreak++;
-                // Visual pop animation
                 streakBanner.classList.remove('animate-streak-pop');
                 void streakBanner.offsetWidth; // Force reflow
                 streakBanner.classList.add('animate-streak-pop');
@@ -481,16 +573,19 @@
             
             streakCounter.innerText = currentStreak;
             
-            // Color changing based on streak intensity
+            // Color changing based on streak intensity - Halloween Theme
             if (currentStreak >= 10) {
-                streakBanner.classList.remove('bg-orange-500', 'bg-purple-500');
-                streakBanner.classList.add('bg-pink-600');
+                streakBanner.classList.replace('text-orange-500', 'text-purple-400');
+                streakBanner.classList.replace('border-orange-700', 'border-purple-600');
             } else if (currentStreak >= 5) {
-                streakBanner.classList.remove('bg-orange-500', 'bg-pink-600');
-                streakBanner.classList.add('bg-purple-500');
+                streakBanner.classList.replace('text-purple-400', 'text-red-500');
+                streakBanner.classList.replace('border-purple-600', 'border-red-600');
+                // Ensure default is cleared if jumping from 0 to 5
+                streakBanner.classList.remove('text-orange-500', 'border-orange-700');
+                streakBanner.classList.add('text-red-500', 'border-red-600');
             } else {
-                streakBanner.classList.remove('bg-purple-500', 'bg-pink-600');
-                streakBanner.classList.add('bg-orange-500');
+                streakBanner.classList.remove('text-purple-400', 'text-red-500', 'border-purple-600', 'border-red-600');
+                streakBanner.classList.add('text-orange-500', 'border-orange-700');
             }
         }
 
@@ -534,9 +629,9 @@
             
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 if(btn.dataset.tab === tabId) {
-                    btn.className = `nav-btn active flex items-center gap-2 px-6 py-3 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 bg-blue-800 text-white border-blue-400`;
+                    btn.className = `nav-btn active flex items-center gap-2 px-6 py-4 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 bg-gray-900 text-orange-500 border-orange-500`;
                 } else {
-                    btn.className = `nav-btn flex items-center gap-2 px-6 py-3 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-blue-300 border-transparent hover:bg-blue-900 hover:text-white`;
+                    btn.className = `nav-btn flex items-center gap-2 px-6 py-4 font-semibold text-sm sm:text-base whitespace-nowrap transition-colors border-b-4 text-gray-400 border-transparent hover:bg-gray-800 hover:text-gray-200`;
                 }
             });
 
@@ -547,6 +642,7 @@
             if (matchedGlobalIds.length === MATCH_UP_DATA.length) {
                 document.getElementById('matchup-grid').classList.add('hidden');
                 document.getElementById('matchup-complete').classList.remove('hidden');
+                if (appState.scores.matchUp === 8) triggerScaryOverlay(); // Trigger gamification
                 return;
             }
 
@@ -571,7 +667,8 @@
                 if(matchedGlobalIds.includes(item.id)) return;
                 const isSelected = matchSelectedQ === item.id;
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left p-4 rounded-xl shadow-sm border-2 transition-all ${isSelected ? 'bg-blue-100 border-blue-500 scale-[1.02]' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-md'}`;
+                // HALLOWEEN THEME: Dark bg, orange borders
+                btn.className = `w-full text-left p-4 rounded-xl shadow-sm border-2 transition-all font-medium ${isSelected ? 'bg-orange-900/50 border-orange-500 scale-[1.02] text-orange-200 shadow-[0_0_15px_rgba(234,88,12,0.4)]' : 'bg-gray-800 border-gray-700 hover:border-orange-500/70 hover:shadow-md text-gray-200'}`;
                 btn.innerText = item.q;
                 btn.onclick = () => handleMatchSelect('q', item.id, btn);
                 btn.id = `btn-q-${item.id}`;
@@ -582,7 +679,7 @@
                 if(matchedGlobalIds.includes(item.id)) return;
                 const isSelected = matchSelectedA === item.id;
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left p-4 rounded-xl shadow-sm border-2 transition-all ${isSelected ? 'bg-purple-100 border-purple-500 scale-[1.02]' : 'bg-white border-slate-200 hover:border-purple-300 hover:shadow-md'}`;
+                btn.className = `w-full text-left p-4 rounded-xl shadow-sm border-2 transition-all font-medium ${isSelected ? 'bg-purple-900/50 border-purple-500 scale-[1.02] text-purple-200 shadow-[0_0_15px_rgba(168,85,247,0.4)]' : 'bg-gray-800 border-gray-700 hover:border-purple-500/70 hover:shadow-md text-gray-200'}`;
                 btn.innerText = item.a;
                 btn.onclick = () => handleMatchSelect('a', item.id, btn);
                 btn.id = `btn-a-${item.id}`;
@@ -606,8 +703,8 @@
                     matchSelectedQ = null;
                     matchSelectedA = null;
                     
-                    SoundFX.success(); // Play success sound
-                    updateStreak(true); // Update streak
+                    SoundFX.success(); 
+                    updateStreak(true); 
 
                     const batchMatched = currentMatchQuestions.filter(q => matchedGlobalIds.includes(q.id)).length;
                     if (batchMatched === 4 && matchBatchIndex === 0) {
@@ -615,6 +712,8 @@
                             matchBatchIndex = 1;
                             loadMatchUpBatch();
                         }, 600);
+                    } else if (matchedGlobalIds.length === MATCH_UP_DATA.length) {
+                        setTimeout(() => loadMatchUpBatch(), 600); // Will trigger end screen
                     } else {
                         renderMatchUp();
                     }
@@ -622,11 +721,12 @@
                     // Mismatch
                     const qBtn = document.getElementById(`btn-q-${matchSelectedQ}`);
                     const aBtn = document.getElementById(`btn-a-${matchSelectedA}`);
-                    if(qBtn) { qBtn.classList.add('bg-red-100', 'border-red-500', 'animate-shake'); qBtn.classList.remove('bg-blue-100', 'border-blue-500'); }
-                    if(aBtn) { aBtn.classList.add('bg-red-100', 'border-red-500', 'animate-shake'); aBtn.classList.remove('bg-purple-100', 'border-purple-500'); }
+                    // Spooky error styling
+                    if(qBtn) { qBtn.className = 'w-full text-left p-4 rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.6)] border-2 transition-all font-medium bg-red-950 border-red-600 text-red-200 animate-shake'; }
+                    if(aBtn) { aBtn.className = 'w-full text-left p-4 rounded-xl shadow-[0_0_15px_rgba(220,38,38,0.6)] border-2 transition-all font-medium bg-red-950 border-red-600 text-red-200 animate-shake'; }
                     
-                    SoundFX.error(); // Play error sound
-                    updateStreak(false); // Break streak
+                    SoundFX.error(); 
+                    updateStreak(false); 
 
                     setTimeout(() => {
                         matchSelectedQ = null;
@@ -645,7 +745,7 @@
                         mcqRetryQueue = [];
                         mcqIndex = 0;
                         mcqIsRetryMode = true;
-                        document.getElementById('mcq-subtitle').innerHTML = '<span class="text-orange-600 font-semibold">Retry Mode: Re-answering missed questions</span>';
+                        document.getElementById('mcq-subtitle').innerHTML = '<span class="text-red-500 font-bold flex items-center gap-1 animate-pulse"><i class="ph-bold ph-ghost"></i> The Spirits Demand a Retry...</span>';
                     } else {
                         finishMcq();
                         return;
@@ -665,7 +765,8 @@
             
             q.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left p-4 rounded-xl border-2 transition-all font-medium text-lg bg-white border-slate-200 hover:border-blue-400 hover:bg-blue-50`;
+                // Halloween style options
+                btn.className = `w-full text-left p-4 rounded-xl border-2 transition-all font-medium text-lg bg-gray-900 border-gray-700 hover:border-orange-500 hover:bg-gray-800 text-gray-200 shadow-sm`;
                 btn.innerText = opt;
                 btn.onclick = () => handleMcqSelect(idx, btn, q.answer);
                 optionsContainer.appendChild(btn);
@@ -680,16 +781,16 @@
 
             // Apply styling
             for(let i=0; i<allBtns.length; i++) {
-                allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg bg-slate-50 border-slate-200 text-slate-400 opacity-60 pointer-events-none";
+                allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg bg-black border-gray-800 text-gray-600 opacity-50 pointer-events-none";
                 if(i === selectedIdx) {
                     if(isCorrect) {
-                        allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg bg-emerald-100 border-emerald-500 text-emerald-900 pointer-events-none";
+                        allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg bg-orange-900/40 border-orange-500 text-orange-400 pointer-events-none shadow-[0_0_15px_rgba(234,88,12,0.4)]";
                     } else {
-                        allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg bg-red-100 border-red-500 text-red-900 pointer-events-none animate-shake";
+                        allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg bg-red-950 border-red-600 text-red-400 pointer-events-none animate-shake shadow-[0_0_15px_rgba(220,38,38,0.5)]";
                     }
                 }
                 if(i === correctIdx && !isCorrect) {
-                     allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg border-emerald-500 bg-emerald-50 text-emerald-800 border-dashed pointer-events-none";
+                     allBtns[i].className = "w-full text-left p-4 rounded-xl border-2 font-medium text-lg border-orange-500/50 bg-gray-900 text-gray-300 border-dashed pointer-events-none";
                 }
             }
 
@@ -697,19 +798,19 @@
 
             if (isCorrect) {
                 if (!mcqIsRetryMode) appState.scores.mcq++;
-                SoundFX.speakPraise(); // Trigger TTS rather than standard positive sound
-                updateStreak(true); // Maintain streak
+                SoundFX.speakPraise(); 
+                updateStreak(true); 
             } else {
                 mcqRetryQueue.push(mcqQuestions[mcqIndex]);
-                SoundFX.error(); // Standard negative sound
-                updateStreak(false); // Break streak
+                SoundFX.error(); 
+                updateStreak(false); 
             }
 
             setTimeout(() => {
                 mcqFeedbackStatus = null;
                 mcqIndex++;
                 renderMcq();
-            }, 1500);
+            }, 1800); // Slightly longer for the creepy TTS to finish
         }
 
         function finishMcq() {
@@ -717,6 +818,7 @@
             document.getElementById('mcq-complete').classList.remove('hidden');
             document.getElementById('mcq-final-score').innerText = `${appState.scores.mcq} / 20`;
             document.getElementById('mcq-progress').parentElement.classList.add('hidden');
+            if (appState.scores.mcq === 20) triggerScaryOverlay(); // Trigger gamification
         }
 
         function renderCalc() {
@@ -725,21 +827,21 @@
             
             CALC_DATA.forEach((item, index) => {
                 const div = document.createElement('div');
-                div.className = "bg-white p-5 rounded-2xl shadow-sm border border-slate-200";
+                div.className = "bg-gray-800 p-5 sm:p-6 rounded-2xl shadow-xl border border-gray-700";
                 div.innerHTML = `
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div class="flex-1">
-                            <span class="font-bold text-blue-800 mr-2">Q${index + 1}.</span>
-                            <span class="font-semibold text-slate-700">${item.q}</span>
+                            <span class="font-bold text-orange-500 mr-2 bg-black px-2 py-1 rounded border border-gray-700">Q${index + 1}.</span>
+                            <span class="font-semibold text-gray-200 text-lg">${item.q}</span>
                         </div>
-                        <div class="w-full md:w-48 shrink-0 relative">
-                            <input type="text" id="calc-input-${item.id}" placeholder="Value..." class="w-full p-3 border-2 rounded-xl text-center font-bold text-lg outline-none transition-colors border-slate-300 focus:border-blue-500">
-                            <div id="calc-icon-${item.id}" class="absolute -right-3 -top-3 bg-white rounded-full p-1 shadow-md hidden"></div>
+                        <div class="w-full md:w-48 shrink-0 relative mt-2 md:mt-0">
+                            <input type="text" id="calc-input-${item.id}" placeholder="Your answer..." class="w-full p-4 border-2 rounded-xl text-center font-bold text-xl outline-none transition-colors border-gray-600 focus:border-orange-500 bg-gray-900 text-white">
+                            <div id="calc-icon-${item.id}" class="absolute -right-3 -top-3 bg-black rounded-full p-1 shadow-md hidden border border-gray-700"></div>
                         </div>
                     </div>
-                    <div id="calc-working-${item.id}" class="mt-4 p-4 bg-slate-50 border-l-4 border-blue-400 rounded-r-xl hidden">
-                        <div class="text-sm font-bold text-slate-500 uppercase mb-1">Model Answer & Working</div>
-                        <div class="font-medium text-slate-800 whitespace-pre-line">${item.working}</div>
+                    <div id="calc-working-${item.id}" class="mt-6 p-5 bg-[#0a0a0a] border-l-4 border-orange-600 rounded-r-xl hidden shadow-inner">
+                        <div class="text-sm font-bold text-orange-700 uppercase mb-2 flex items-center gap-2"><i class="ph-fill ph-book-open text-lg"></i> Ancient Text & Working</div>
+                        <div class="font-medium text-gray-400 whitespace-pre-line">${item.working}</div>
                     </div>
                 `;
                 list.appendChild(div);
@@ -750,7 +852,6 @@
             let correctCount = 0;
             
             CALC_DATA.forEach((item, i) => {
-                // Ensure minor delay between checks so streak animates sequentially if desired
                 setTimeout(() => {
                     const input = document.getElementById(`calc-input-${item.id}`);
                     const iconContainer = document.getElementById(`calc-icon-${item.id}`);
@@ -762,21 +863,23 @@
                     
                     if (isCorrect) {
                         correctCount++;
-                        updateStreak(true); // Treat as individual streak progression
-                        input.className = "w-full p-3 border-2 rounded-xl text-center font-bold text-lg border-emerald-400 bg-emerald-50 text-emerald-700";
-                        iconContainer.innerHTML = `<i class="ph-fill ph-check-circle text-emerald-500 text-2xl"></i>`;
+                        updateStreak(true); 
+                        input.className = "w-full p-4 border-2 rounded-xl text-center font-bold text-xl border-orange-500 bg-orange-900/20 text-orange-400";
+                        iconContainer.innerHTML = `<i class="ph-fill ph-check-circle text-orange-500 text-3xl"></i>`;
                     } else {
-                        updateStreak(false); // Break streak
-                        input.className = "w-full p-3 border-2 rounded-xl text-center font-bold text-lg border-red-400 bg-red-50 text-red-700";
-                        iconContainer.innerHTML = `<i class="ph-fill ph-x-circle text-red-500 text-2xl"></i>`;
+                        updateStreak(false); 
+                        input.className = "w-full p-4 border-2 rounded-xl text-center font-bold text-xl border-red-600 bg-red-950 text-red-500";
+                        iconContainer.innerHTML = `<i class="ph-fill ph-skull text-red-500 text-3xl"></i>`;
                     }
                     iconContainer.classList.remove('hidden');
                     workingDiv.classList.remove('hidden');
                     
-                    // On final item, trigger overall sound and show score
                     if(i === CALC_DATA.length - 1) {
                         appState.scores.calc = correctCount;
-                        if(correctCount === 10) SoundFX.success(); 
+                        if(correctCount === 10) {
+                            SoundFX.success(); 
+                            triggerScaryOverlay(); // Trigger gamification
+                        }
                         else SoundFX.error();
                         
                         document.getElementById('calc-submit-btn').classList.add('hidden');
@@ -784,7 +887,7 @@
                         document.getElementById('calc-score-display').innerText = `${correctCount} / 10`;
                         document.getElementById('calc-summary').classList.add('flex');
                     }
-                }, i * 200); // 200ms stagger for gamified reveal
+                }, i * 200); 
             });
         }
 
@@ -797,23 +900,23 @@
             
             LONG_ANSWERS_DATA.forEach((item, index) => {
                 const div = document.createElement('div');
-                div.className = "bg-white p-6 rounded-2xl shadow-sm border border-slate-200";
+                div.className = "bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-700";
                 div.id = `long-container-${item.id}`;
                 
                 div.innerHTML = `
-                    <h3 class="font-bold text-lg text-slate-800 mb-4">
-                        <span class="text-blue-600 mr-2">Q${index + 1}.</span> ${item.q}
+                    <h3 class="font-bold text-lg text-gray-200 mb-4 leading-relaxed">
+                        <span class="text-orange-500 mr-2 bg-black px-2 py-1 rounded border border-gray-700">Q${index + 1}.</span> ${item.q}
                     </h3>
-                    <div class="relative">
-                        <textarea id="long-input-${item.id}" placeholder="Type or dictate your answer here..." class="w-full h-32 p-4 border-2 rounded-xl outline-none resize-none transition-colors border-slate-300 focus:border-blue-500 bg-slate-50 text-slate-800"></textarea>
-                        <button id="dictate-btn-${item.id}" onclick="toggleDictation(${item.id})" class="absolute bottom-3 right-3 p-2 rounded-full shadow-md transition-all bg-white text-slate-600 hover:bg-slate-100 border border-slate-200" title="Dictate Answer">
-                            <i class="ph-fill ph-microphone text-xl"></i>
+                    <div class="relative mt-4">
+                        <textarea id="long-input-${item.id}" placeholder="Type or whisper your incantation here..." class="w-full h-40 p-4 border-2 rounded-xl outline-none resize-none transition-colors border-gray-600 focus:border-orange-500 bg-gray-900 text-white text-base shadow-inner placeholder-gray-600"></textarea>
+                        <button id="dictate-btn-${item.id}" onclick="toggleDictation(${item.id})" class="absolute bottom-4 right-4 p-3 rounded-full shadow-[0_0_10px_rgba(0,0,0,0.5)] transition-all bg-black text-gray-400 hover:text-orange-500 border border-gray-700" title="Dictate Answer">
+                            <i class="ph-fill ph-microphone text-2xl"></i>
                         </button>
                     </div>
-                    <button id="mark-btn-${item.id}" onclick="markLongAnswer(${item.id})" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-md transition-colors">
-                        Mark Answer & Get Feedback
+                    <button id="mark-btn-${item.id}" onclick="markLongAnswer(${item.id})" class="mt-6 w-full bg-orange-700 hover:bg-orange-600 text-black font-black uppercase tracking-widest py-4 rounded-xl shadow-[0_0_15px_rgba(234,88,12,0.3)] transition-colors text-lg flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-magic-wand"></i> Cast Spell & Get Feedback
                     </button>
-                    <div id="feedback-area-${item.id}" class="hidden mt-6 border-t pt-6 animate-fade-in"></div>
+                    <div id="feedback-area-${item.id}" class="hidden mt-8 border-t border-gray-700 pt-8 animate-fade-in"></div>
                 `;
                 list.appendChild(div);
             });
@@ -822,7 +925,7 @@
         function toggleDictation(id) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                showToast("Speech recognition is not supported in this browser. Please type.");
+                showToast("The spirits cannot hear you in this browser. Please type.");
                 return;
             }
 
@@ -843,8 +946,8 @@
 
             dictationRecognition.onstart = () => {
                 activeDictationId = id;
-                btn.classList.add('animate-dictate');
-                showToast("Listening... Speak your answer.");
+                btn.classList.add('animate-dictate'); // Blood red pulsing
+                showToast("Listening to the whispers...");
             };
 
             dictationRecognition.onresult = (event) => {
@@ -853,7 +956,7 @@
             };
 
             dictationRecognition.onerror = (event) => {
-                showToast(`Microphone error: ${event.error}`);
+                showToast(`Dark interference: ${event.error}`);
             };
 
             dictationRecognition.onend = () => {
@@ -868,74 +971,50 @@
             const t = text.toLowerCase();
             let fb = [];
             let score = 0;
-
+            // Analysis logic remains the same functionally
             if (id === 1) { 
                 if (t.includes("small") && (t.includes("surface area") || t.includes("sa:v") || t.includes("sa to vol"))) {
                     score++; fb.push({ success: true, msg: "Identified the small Surface Area to Volume (SA:V) ratio." });
-                } else {
-                    fb.push({ success: false, msg: "Missed stating that large organisms have a small Surface Area to Volume (SA:V) ratio." });
-                }
+                } else { fb.push({ success: false, msg: "Missed stating that large organisms have a small Surface Area to Volume (SA:V) ratio." }); }
                 if (t.includes("distance") || t.includes("pathway") || t.includes("centre")) {
                     score++; fb.push({ success: true, msg: "Correctly noted the long diffusion distance/pathway." });
-                } else {
-                    fb.push({ success: false, msg: "Missed mentioning the long diffusion distance to cells in the centre of the body." });
-                }
+                } else { fb.push({ success: false, msg: "Missed mentioning the long diffusion distance to cells in the centre of the body." }); }
                 if (t.includes("slow") || t.includes("insufficient") || t.includes("metabolic") || t.includes("demand") || t.includes("enough")) {
                     score++; fb.push({ success: true, msg: "Stated that diffusion alone is too slow / insufficient for metabolic demands." });
-                } else {
-                    fb.push({ success: false, msg: "Forgot to conclude that diffusion is too slow/insufficient to supply enough oxygen/glucose." });
-                }
+                } else { fb.push({ success: false, msg: "Forgot to conclude that diffusion is too slow/insufficient to supply enough oxygen/glucose." }); }
             } 
             else if (id === 2) { 
                 if (t.includes("in-vitro") || t.includes("in vivo") || t.includes("isolated") || t.includes("complex") || t.includes("whole organism")) {
                     score++; fb.push({ success: true, msg: "Explained the limitation of isolated capillaries vs complex whole organisms (in-vivo vs in-vitro)." });
-                } else {
-                    fb.push({ success: false, msg: "Missed the limitation: isolated capillaries don't reflect the complex interactions of a living organism." });
-                }
+                } else { fb.push({ success: false, msg: "Missed the limitation: isolated capillaries don't reflect the complex interactions of a living organism." }); }
                 if (t.includes("overlap") || t.includes("significant") || t.includes("range bar") || t.includes("error bar") || t.includes("smoker")) {
                     score++; fb.push({ success: true, msg: "Correctly identified the significance of overlapping range bars with smokers." });
-                } else {
-                    fb.push({ success: false, msg: "Forgot to mention that overlapping range bars mean the difference is not significant compared to smokers." });
-                }
+                } else { fb.push({ success: false, msg: "Forgot to mention that overlapping range bars mean the difference is not significant compared to smokers." }); }
                 if (t.includes("valid") || t.includes("false claim") || t.includes("bias") || t.includes("check")) {
                     score++; fb.push({ success: true, msg: "Identified the true purpose of peer review (validity, detecting false claims, avoiding bias)." });
-                } else {
-                    fb.push({ success: false, msg: "You missed the true purpose of peer review (to check validity, avoid bias, or detect false claims)." });
-                }
+                } else { fb.push({ success: false, msg: "You missed the true purpose of peer review (to check validity, avoid bias, or detect false claims)." }); }
             }
             else if (id === 3) { 
                 if (t.includes("break") || t.includes("detach") || t.includes("original") || t.includes("primary")) {
                     score++; fb.push({ success: true, msg: "Noted that cells break off from the primary/original tumour." });
-                } else {
-                    fb.push({ success: false, msg: "Missed stating that cancer cells break off/detach from the primary tumour." });
-                }
+                } else { fb.push({ success: false, msg: "Missed stating that cancer cells break off/detach from the primary tumour." }); }
                 if (t.includes("blood") || t.includes("lymph") || t.includes("travel") || t.includes("stream")) {
                     score++; fb.push({ success: true, msg: "Correctly stated they travel through the blood stream or lymphatic system." });
-                } else {
-                    fb.push({ success: false, msg: "Missed explaining the transport mechanism (travelling in the blood or lymph)." });
-                }
+                } else { fb.push({ success: false, msg: "Missed explaining the transport mechanism (travelling in the blood or lymph)." }); }
                 if (t.includes("secondary") || t.includes("divide") || t.includes("another") || t.includes("elsewhere") || t.includes("organ")) {
                     score++; fb.push({ success: true, msg: "Identified that they settle elsewhere and divide to form a secondary tumour." });
-                } else {
-                    fb.push({ success: false, msg: "Forgot to mention them settling in a new organ and dividing to form a secondary tumour." });
-                }
+                } else { fb.push({ success: false, msg: "Forgot to mention them settling in a new organ and dividing to form a secondary tumour." }); }
             }
             else if (id === 4) { 
                 if (t.includes("store") || t.includes("starch") || (t.includes("glucose") && t.includes("day"))) {
                     score++; fb.push({ success: true, msg: "Mentioned that plants use glucose made and stored during the day." });
-                } else {
-                    fb.push({ success: false, msg: "Missed identifying the source of energy (glucose that was stored during the day)." });
-                }
+                } else { fb.push({ success: false, msg: "Missed identifying the source of energy (glucose that was stored during the day)." }); }
                 if (t.includes("respir") || t.includes("atp") || t.includes("energy") || t.includes("division")) {
                     score++; fb.push({ success: true, msg: "Stated that stored glucose is used for respiration to release energy (ATP) for cell division." });
-                } else {
-                    fb.push({ success: false, msg: "Forgot to mention respiration releasing energy (ATP) needed for cell division." });
-                }
+                } else { fb.push({ success: false, msg: "Forgot to mention respiration releasing energy (ATP) needed for cell division." }); }
                 if (t.includes("cellulose") || t.includes("cell wall")) {
                     score++; fb.push({ success: true, msg: "Correctly noted that glucose is used to synthesise cellulose for new cell walls." });
-                } else {
-                    fb.push({ success: false, msg: "Missed stating that glucose is required to make cellulose for building new cell walls." });
-                }
+                } else { fb.push({ success: false, msg: "Missed stating that glucose is required to make cellulose for building new cell walls." }); }
             }
             return { score, fb };
         }
@@ -944,13 +1023,13 @@
             const inputEl = document.getElementById(`long-input-${id}`);
             const text = inputEl.value.trim();
             if (text.length < 5) {
-                showToast("Please write a longer answer before marking.");
+                showToast("The spirits demand more words.");
                 return;
             }
 
             inputEl.disabled = true;
-            inputEl.classList.remove('bg-slate-50');
-            inputEl.classList.add('bg-slate-100', 'text-slate-600');
+            inputEl.classList.remove('bg-gray-900', 'border-gray-600', 'text-white');
+            inputEl.classList.add('bg-black', 'text-gray-500', 'border-gray-800');
             document.getElementById(`dictate-btn-${id}`).classList.add('hidden');
             document.getElementById(`mark-btn-${id}`).classList.add('hidden');
 
@@ -960,33 +1039,34 @@
             const modelData = LONG_ANSWERS_DATA.find(d => d.id === id).model;
             const fbArea = document.getElementById(`feedback-area-${id}`);
             
-            let fbHtml = `<div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-4">
-                <h4 class="font-bold text-slate-700 mb-3 uppercase tracking-wider text-sm flex items-center gap-2">
-                    <i class="ph ph-chart-bar text-lg"></i> Automated Feedback Analysis
-                </h4><ul class="space-y-2">`;
+            let fbHtml = `<div class="bg-gray-900 p-5 rounded-xl border border-gray-700 mb-4 shadow-sm">
+                <h4 class="font-bold text-orange-500 mb-4 uppercase tracking-wider text-sm flex items-center gap-2">
+                    <i class="ph-fill ph-crystal-ball text-xl"></i> Psychic Keyword Analysis
+                </h4><ul class="space-y-3">`;
                 
             analysis.fb.forEach(f => {
-                const icon = f.success ? '✅' : '❌';
-                const color = f.success ? 'text-emerald-700' : 'text-red-600';
-                fbHtml += `<li class="text-sm md:text-base font-medium ${color}">${icon} ${f.msg}</li>`;
+                const icon = f.success ? '<i class="ph-fill ph-check-circle text-xl text-orange-500 mt-0.5 shrink-0"></i>' : '<i class="ph-fill ph-skull text-xl text-red-600 mt-0.5 shrink-0"></i>';
+                const color = f.success ? 'text-gray-300 bg-gray-800 border border-gray-700' : 'text-red-400 bg-red-950/50 border border-red-900';
+                fbHtml += `<li class="text-sm md:text-base font-medium p-3 rounded-lg flex items-start gap-3 ${color}">${icon} <span>${f.msg}</span></li>`;
             });
             fbHtml += `</ul></div>`;
 
-            fbHtml += `<div class="bg-blue-50 p-5 rounded-xl mb-4 border border-blue-200">
-                <div class="font-bold text-blue-900 mb-2 uppercase tracking-wider text-sm flex items-center gap-2">
-                    <i class="ph ph-check-circle text-lg"></i> AQA Model Answer / Marking Points:
+            fbHtml += `<div class="bg-black p-6 rounded-xl mb-4 border border-orange-900/50 shadow-sm relative overflow-hidden">
+                <div class="absolute inset-0 bg-orange-900/5 pointer-events-none"></div>
+                <div class="font-bold text-orange-600 mb-3 uppercase tracking-wider text-sm flex items-center gap-2 relative z-10">
+                    <i class="ph-fill ph-scroll text-lg"></i> The Forbidden True Answer:
                 </div>
-                <div class="text-slate-800 whitespace-pre-line font-medium">${modelData}</div>
+                <div class="text-gray-300 whitespace-pre-line font-medium leading-relaxed relative z-10">${modelData}</div>
             </div>`;
 
-            fbHtml += `<div class="flex flex-col md:flex-row items-center justify-between bg-slate-100 p-4 rounded-xl border border-slate-200">
-                <div class="mb-3 md:mb-0">
-                    <span class="font-bold text-slate-800 block">Confirm Your Score</span>
-                    <span class="text-sm text-slate-500 font-medium">We suggested ${analysis.score} based on keywords. Adjust if needed.</span>
+            fbHtml += `<div class="flex flex-col md:flex-row items-center justify-between bg-gray-900 p-5 rounded-xl border border-gray-700 shadow-sm">
+                <div class="mb-4 md:mb-0 text-center md:text-left">
+                    <span class="font-bold text-gray-200 block text-lg">Accept Your Fate</span>
+                    <span class="text-sm text-gray-500 font-medium">The spirits awarded <strong class="text-orange-500">${analysis.score}</strong> based on incantations. Adjust if you dare.</span>
                 </div>
                 <div class="flex gap-2" id="score-btns-${id}">
                     ${[0, 1, 2, 3].map(m => `
-                        <button onclick="setLongScore(${id},${m})" id="btn-score-${id}-${m}" class="w-12 h-12 rounded-xl font-bold text-lg transition-all shadow-sm ${analysis.score === m ? 'bg-emerald-500 text-white border-2 border-emerald-600 scale-110' : 'bg-white text-slate-600 border border-slate-300 hover:bg-emerald-50'}">
+                        <button onclick="setLongScore(${id},${m})" id="btn-score-${id}-${m}" class="w-14 h-14 rounded-xl font-bold text-xl transition-all shadow-sm ${analysis.score === m ? 'bg-orange-600 text-black border-2 border-orange-400 scale-110 shadow-[0_0_15px_rgba(234,88,12,0.5)]' : 'bg-black text-gray-500 border border-gray-700 hover:bg-gray-800 hover:text-orange-500'}">
                             ${m}
                         </button>
                     `).join('')}
@@ -995,6 +1075,8 @@
 
             fbArea.innerHTML = fbHtml;
             fbArea.classList.remove('hidden');
+            
+            setTimeout(() => { fbArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
         }
 
         function setLongScore(qId, score) {
@@ -1002,9 +1084,9 @@
             [0, 1, 2, 3].forEach(m => {
                 const btn = document.getElementById(`btn-score-${qId}-${m}`);
                 if (m === score) {
-                    btn.className = "w-12 h-12 rounded-xl font-bold text-lg transition-all shadow-sm bg-emerald-500 text-white border-2 border-emerald-600 scale-110";
+                    btn.className = "w-14 h-14 rounded-xl font-bold text-xl transition-all shadow-sm bg-orange-600 text-black border-2 border-orange-400 scale-110 shadow-[0_0_15px_rgba(234,88,12,0.5)]";
                 } else {
-                    btn.className = "w-12 h-12 rounded-xl font-bold text-lg transition-all shadow-sm bg-white text-slate-600 border border-slate-300 hover:bg-emerald-50";
+                    btn.className = "w-14 h-14 rounded-xl font-bold text-xl transition-all shadow-sm bg-black text-gray-500 border border-gray-700 hover:bg-gray-800 hover:text-orange-500";
                 }
             });
         }
@@ -1022,10 +1104,10 @@
             
             document.getElementById('dash-svg-path').style.strokeDasharray = `${percent}, 100`;
 
-            let fbText = "Complete the activities to generate your feedback.";
-            if (percent >= 80) fbText = "Excellent progress! You have addressed these weaknesses masterfully.";
-            else if (percent >= 60) fbText = "Good effort. Review the remaining gaps in your knowledge.";
-            else if (percent > 0) fbText = "Keep working at it. Repetition is key to locking in these concepts.";
+            let fbText = "Complete the trials to uncover your fate.";
+            if (percent >= 80) fbText = "Witchcraft! You have survived the trials masterfully.";
+            else if (percent >= 60) fbText = "You cling to life. Review the remaining dark corners.";
+            else if (percent > 0) fbText = "The darkness closes in. Repetition is key to survival.";
             document.getElementById('dash-feedback').innerText = fbText;
 
             document.getElementById('score-match').innerText = appState.scores.matchUp;
@@ -1034,11 +1116,11 @@
             document.getElementById('score-long').innerText = getLongTotal();
         }
 
-        // Modal based approach to replace prompt() to adhere to rules
         function handleScreenshotClick() {
             if (!appState.studentName.trim()) {
                 document.getElementById('name-modal').classList.remove('hidden');
                 document.getElementById('name-modal').classList.add('flex');
+                document.getElementById('student-name-input').focus();
             } else {
                 openScorecard();
             }
@@ -1057,10 +1139,14 @@
                 closeNameModal();
                 openScorecard();
             } else {
-                input.classList.add('border-red-500', 'animate-shake');
-                setTimeout(() => input.classList.remove('animate-shake'), 400);
+                input.classList.add('border-red-600', 'animate-shake', 'bg-red-950/50');
+                setTimeout(() => input.classList.remove('animate-shake', 'border-red-600', 'bg-red-950/50'), 400);
             }
         }
+
+        document.getElementById('student-name-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') saveNameAndShowScorecard();
+        });
 
         function openScorecard() {
             const longTotal = getLongTotal();
@@ -1079,10 +1165,15 @@
 
             document.getElementById('sc-total').innerText = grandTotal;
             document.getElementById('sc-percent').innerText = percent;
-            document.getElementById('sc-timestamp').innerText = new Date().toLocaleString();
+            
+            const now = new Date();
+            document.getElementById('sc-timestamp').innerText = `${now.toLocaleDateString()} at ${now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
             document.getElementById('scorecard-modal').classList.remove('hidden');
             document.getElementById('scorecard-modal').classList.add('flex');
+            
+            // Scary sound on judgment
+            SoundFX.scaryLaugh();
         }
 
         function closeScorecard() {
@@ -1090,7 +1181,6 @@
             document.getElementById('scorecard-modal').classList.remove('flex');
         }
 
-        // Initialize App on Load
         window.onload = () => {
             loadMatchUpBatch();
             renderMcq();
